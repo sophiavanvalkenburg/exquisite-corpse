@@ -1,5 +1,7 @@
 var express = require('express');
 var mongodb = require('mongodb');
+var bodyParser = require('body-parser');
+
 var app = express();
 
 var db;
@@ -20,6 +22,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function(err, database) {
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -27,6 +30,12 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
+
+app.put("/save", function(request, response) {
+  var squareCol = db.collection('square_test');
+  squareCol.insertOne(request.body);
+  response.send("OK");
+})
 
 app.get('/test', function(request, response){
   var testCol = db.collection('test');
