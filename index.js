@@ -33,13 +33,14 @@ app.get('/', function(request, response) {
 
 app.put("/save", function(request, response) {
   var squareCol = db.collection('square_test');
-  squareCol.insertOne(request.body);
-  response.send("OK");
+  squareCol.insertOne(request.body, function(err, r){
+    response.send("OK");
+  });
 })
 
 app.get('/test', function(request, response){
-  var testCol = db.collection('test');
-  var doc = testCol.findOne({foo: "bar"}, {}, function(err, res){
+  var testCol = db.collection('square_test');
+  var doc = testCol.findOne({_id: new mongodb.ObjectId("594eda91df1f4c04266ac9aa")}, {}, function(err, res){
     response.json(res);
   });
 });
